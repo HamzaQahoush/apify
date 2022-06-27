@@ -6,7 +6,7 @@ from . import views
 
 # api/products/
 urlpatterns = [
-    path("<int:pk>/", views.ProductDetailview.as_view()),
+    path("<int:pk>/", views.ProductDetailview.as_view(),name='product-detail'),
     path("", views.ProductListCreateAPIView.as_view()),
     path("<int:pk>/update/", views.ProductUpdateView.as_view()),
     path("<int:pk>/delete/", views.ProductDeleteView.as_view()),

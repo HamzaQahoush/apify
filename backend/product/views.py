@@ -1,13 +1,12 @@
-from rest_framework import generics, permissions, authentication
+from rest_framework import generics, permissions
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
-from .permissions import IsStaffEditorPermission
+from api.mixins import StaffEditorPermissionMixin
 
-
-class ProductDetailview(generics.RetrieveAPIView):
+class ProductDetailview(StaffEditorPermissionMixin,generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -19,14 +18,12 @@ class ProductDetailview(generics.RetrieveAPIView):
         serializer.save(content=content)
 
 
-class ProductListCreateAPIView(generics.ListCreateAPIView):
+class ProductListCreateAPIView(StaffEditorPermissionMixin,generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
-    authentication_classes = [authentication.SessionAuthentication,authentication.TokenAuthentication]
 
 
-class ProductUpdateView(generics.UpdateAPIView):
+class ProductUpdateView(generics.UpdateAPIView,StaffEditorPermissionMixin):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "pk"
